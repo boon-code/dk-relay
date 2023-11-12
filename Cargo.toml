@@ -10,6 +10,7 @@ anyhow = "1.0"
 clap = { version = "4.4", features = ["derive"] }
 
 [features]
+default = ["all"]
 all = ["ftdi", "ftd2", "vendored"]
 ftdi = ["dep:ftdi"]
 ftd2 = ["dep:libftd2xx"]
