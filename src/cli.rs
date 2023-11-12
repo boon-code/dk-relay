@@ -1,10 +1,14 @@
 use clap::{Parser, ValueEnum};
 
+
+#[cfg(not(any(feature = "ftdi", feature = "ftd2")))]
+compile_error!("Either ftdi or ftd2 has to be enabled (or both)");
+
 #[derive(Parser, Debug)]
 #[command(version = env!("CARGO_PKG_VERSION"), author = "Manuel Huber")]
 pub struct Cli {
     #[cfg(all(feature = "ftd2", feature = "ftdi"))]
-    /// bla bla bla
+    /// library to use
     #[arg(value_enum, short = 'I', long)]
     implementation: FtdiLib,
 
@@ -31,14 +35,17 @@ impl Cli {
         }
 
         #[cfg(not(any(feature = "ftdi", feature = "ftd2")))]
-        compile_error!("Either ftdi or ftd2 has to be enabled (or both)");
+        unreachable!("Either ftdi or ftd2 has to be enabled");
     }
 }
 
 #[derive(ValueEnum, Debug, Clone)]
 pub enum FtdiLib {
+    #[cfg(feature = "ftdi")]
     #[value(name = "1")]
     Ftdi1,
+
+    #[cfg(feature = "ftd2")]
     #[value(name = "2")]
     Ftd2,
 }
