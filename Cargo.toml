@@ -8,10 +8,18 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0"
 clap = { version = "4.4", features = ["derive"] }
-#libftd2xx = { version = "0.32", features = ["static"] }
-#ftdi = { version = "0.1", features = ["vendored", "libusb1-sys"] }
+
+[features]
+all = ["ftdi", "ftd2", "vendored"]
+ftdi = ["dep:ftdi"]
+ftd2 = ["dep:libftd2xx"]
+vendored = ["ftdi?/vendored", "ftdi?/libusb1-sys", "libftd2xx?/static"]
+
+[dependencies.libftd2xx]
+version = "0.32"
+optional = true
 
 [dependencies.ftdi]
 git = "https://github.com/boon-code/ftdi-fork.git"
 branch = "add-detach-mode"
-features = ["vendored", "libusb1-sys"]
+optional = true
