@@ -1,0 +1,17 @@
+[package]
+name = "dk-relay"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+anyhow = "1.0"
+clap = { version = "4.4", features = ["derive"] }
+#libftd2xx = { version = "0.32", features = ["static"] }
+#ftdi = { version = "0.1", features = ["vendored", "libusb1-sys"] }
+
+[dependencies.ftdi]
+git = "https://github.com/boon-code/ftdi-fork.git"
+branch = "add-detach-mode"
+features = ["vendored", "libusb1-sys"]
