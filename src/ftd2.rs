@@ -1,9 +1,9 @@
 use std::time::Duration;
-
-use libftd2xx::{Ftdi, FtdiCommon};
 use anyhow::Result;
+use libftd2xx::{Ftdi, FtdiCommon};
+use crate::cli::Cli;
 
-pub fn demo() -> Result<()> {
+pub fn demo(cli: &Cli) -> Result<()> {
     println!("FTD2");
     let mut ft = Ftdi::new()?;
     let info = ft.device_info()?;

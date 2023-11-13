@@ -1,9 +1,9 @@
+use std::{io::{Read, Write}, time::Duration};
 use anyhow::Result;
 use ftdi;
-use std::{io::{Read, Write}, time::Duration};
+use crate::cli::Cli;
 
-
-pub fn demo() -> Result<()> {
+pub fn demo(cli: &Cli) -> Result<()> {
     let timeout = Duration::from_millis(100);
     let vid :u16 = 0x0403;
     let pid :u16 = 0x6001;
