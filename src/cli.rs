@@ -23,6 +23,10 @@ pub struct Cli {
     /// Serial number
     #[arg(short = 's', long)]
     pub serial: Option<String>,
+
+    /// Just show info and exit
+    #[arg(short = 'D', long)]
+    pub only_display: bool,
 }
 impl Cli {
     pub fn get_lib(&self) -> FtdiLib {

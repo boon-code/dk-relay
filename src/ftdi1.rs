@@ -15,7 +15,6 @@ pub fn demo(cli: &Cli) -> Result<()> {
         dev = dev.serial(serial);
     }
     let mut dev = dev.open()?;
-    dev.set_bitmode(0xff, ftdi::BitMode::SyncBB)?;
     println!("Type: {:?}", unsafe { (*dev.libftdi_context()).type_ });
     println!("Interface: {:?}", unsafe { (*dev.libftdi_context()).interface });
     println!("Bitbang mode: {:?}", unsafe { (*dev.libftdi_context()).bitbang_mode });
@@ -24,6 +23,11 @@ pub fn demo(cli: &Cli) -> Result<()> {
     println!("usb_dev: {:?}", unsafe { dev.libftdi_context().read().usb_dev });
     println!("Detach mode: {:?}", unsafe { dev.libftdi_context().read().module_detach_mode });
 
+    if cli.only_display {
+        return Ok(())
+    }
+
+    dev.set_bitmode(0xff, ftdi::BitMode::SyncBB)?;
     let mut buf: [u8; 1] = [0; 1];
     dev.read(&mut buf)?;
 
