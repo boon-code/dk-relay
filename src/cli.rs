@@ -19,6 +19,10 @@ pub struct Cli {
     /// Product ID to search for
     #[arg(long, default_value = "0x6001")]
     pub pid: String,
+
+    /// Serial number
+    #[arg(short = 's', long)]
+    pub serial: Option<String>,
 }
 impl Cli {
     pub fn get_lib(&self) -> FtdiLib {

@@ -10,8 +10,11 @@ pub fn demo(cli: &Cli) -> Result<()> {
     println!("FTDI1");
     let mut dev = ftdi::find_by_vid_pid(vid, pid)
         //.serial("DAE005CV")
-        .set_detach_mode(ftdi::DetachMode::AutoDetachReatach)
-        .open()?;
+        .set_detach_mode(ftdi::DetachMode::AutoDetachReatach);
+    if let Some(serial) = &cli.serial {
+        dev = dev.serial(serial);
+    }
+    let mut dev = dev.open()?;
     dev.set_bitmode(0xff, ftdi::BitMode::SyncBB)?;
     println!("Type: {:?}", unsafe { (*dev.libftdi_context()).type_ });
     println!("Interface: {:?}", unsafe { (*dev.libftdi_context()).interface });

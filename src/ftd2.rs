@@ -5,7 +5,9 @@ use crate::cli::Cli;
 
 pub fn demo(cli: &Cli) -> Result<()> {
     println!("FTD2");
-    let mut ft = Ftdi::new()?;
+    let mut ft = cli.serial.as_ref()
+        .map(|serial| Ftdi::with_serial_number(serial.as_str()))
+        .unwrap_or_else(|| Ftdi::new())?;
     let info = ft.device_info()?;
     println!("Device information: {:?}", info);
 
