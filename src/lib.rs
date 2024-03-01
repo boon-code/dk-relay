@@ -9,6 +9,9 @@ mod ftd2;
 
 pub mod cli;
 
+#[cfg(test)]
+mod test_trait;
+
 mod relay;
 pub use relay::DkRelay;
 
