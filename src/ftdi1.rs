@@ -1,7 +1,71 @@
-use std::{io::{Read, Write}, time::Duration};
+use crate::relay::{BasicOps, BitBangDev};
 use crate::Result;
-use ftdi;
-use crate::cli::Cli;
+use crate::{cli::Cli, relay::InitDeinit};
+use anyhow::bail;
+use ftdi::{self, Device};
+use std::{
+    io::{Read, Write},
+    time::Duration,
+};
+
+pub struct Ftdi1Dev {
+    dev: Option<Device>,
+}
+impl Ftdi1Dev {
+    pub fn new(out_mask: &[u8]) -> Result<Self> {
+        let mut s = Self { dev: None };
+        s.init(out_mask)?;
+        Ok(s)
+    }
+}
+impl BasicOps for Ftdi1Dev {
+    fn write_pins(&mut self, buf: &mut [u8]) -> Result<()> {
+        if let Some(dev) = self.dev.as_mut() {
+            dev.write_all(buf)?;
+            Ok(())
+        } else {
+            bail!("Not initialized");
+        }
+    }
+
+    fn read_pins(&mut self, buf: &mut [u8]) -> Result<()> {
+        if let Some(dev) = self.dev.as_mut() {
+            dev.read_exact(buf)?;
+            Ok(())
+        } else {
+            bail!("Not initialized");
+        }
+    }
+}
+impl InitDeinit for Ftdi1Dev {
+    fn init(&mut self, out_mask: &[u8]) -> Result<()> {
+        let vid: u16 = 0x0403;
+        let pid: u16 = 0x6001;
+        if self.dev.is_some() {
+            bail!("Device is already initialized");
+        }
+        if let Some(mask) = out_mask.first() {
+            _ = self.dev.take();
+            let mut dev = ftdi::find_by_vid_pid(vid, pid).open()?;
+            dev.set_bitmode(*mask, ftdi::BitMode::SyncBB)?;
+            self.dev.replace(dev);
+            Ok(())
+        } else {
+            bail!("Output mask is an empty array");
+        }
+    }
+
+    fn deinit(&mut self) -> Result<()> {
+        _ = self.dev.take();
+        Ok(())
+    }
+}
+impl BitBangDev for Ftdi1Dev {}
+impl Drop for Ftdi1Dev {
+    fn drop(&mut self) {
+        _ = self.deinit(); // TODO: log if this errors
+    }
+}
 
 pub fn demo(cli: &Cli) -> Result<()> {
     let timeout = Duration::from_millis(100);
