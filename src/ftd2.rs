@@ -12,7 +12,7 @@ pub fn demo(cli: &Cli) -> Result<()> {
     println!("Device information: {:?}", info);
 
     if cli.only_display {
-        return Ok(())
+        return Ok(());
     }
 
     ft.set_bit_mode(0xff, libftd2xx::BitMode::SyncBitbang)?;
