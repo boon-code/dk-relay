@@ -76,7 +76,9 @@ impl BitBangDev for Ftd2Dev {}
 
 pub fn demo(cli: &Cli) -> Result<()> {
     println!("FTD2");
-    let mut ft = cli.serial.as_ref()
+    let mut ft = cli
+        .serial
+        .as_ref()
         .map(|serial| Ftdi::with_serial_number(serial.as_str()))
         .unwrap_or_else(|| Ftdi::new())?;
     let info = ft.device_info()?;
