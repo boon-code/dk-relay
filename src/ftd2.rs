@@ -1,5 +1,5 @@
 use std::time::Duration;
-use anyhow::Result;
+use crate::Result;
 use libftd2xx::{Ftdi, FtdiCommon};
 use crate::cli::Cli;
 

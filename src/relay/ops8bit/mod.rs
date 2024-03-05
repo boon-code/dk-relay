@@ -1,7 +1,8 @@
 // traits implementing operations using 8 bits only
 // using the super trait defined in super::basic
+use crate::Result;
 use super::BasicOps;
-use anyhow::{Result, bail};
+use anyhow::bail;
 
 pub trait IoOps8Bit: BasicOps {
     fn read8_pins(&mut self) -> Result<u8> {

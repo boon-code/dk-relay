@@ -1,6 +1,6 @@
 use crate::relay::{BitBangDev, BasicOps, InitDeinit};
+use crate::Result;
 use super::IoOps8Bit;
-use anyhow::Result;
 
 #[test]
 fn testit() {

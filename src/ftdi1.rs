@@ -1,5 +1,5 @@
 use std::{io::{Read, Write}, time::Duration};
-use anyhow::Result;
+use crate::Result;
 use ftdi;
 use crate::cli::Cli;
 
