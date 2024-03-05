@@ -5,8 +5,8 @@ use crate::cli::Cli;
 
 pub fn demo(cli: &Cli) -> Result<()> {
     let timeout = Duration::from_millis(100);
-    let vid :u16 = 0x0403;
-    let pid :u16 = 0x6001;
+    let vid: u16 = 0x0403;
+    let pid: u16 = 0x6001;
     println!("FTDI1");
     let mut dev = ftdi::find_by_vid_pid(vid, pid)
         //.serial("DAE005CV")
@@ -16,15 +16,27 @@ pub fn demo(cli: &Cli) -> Result<()> {
     }
     let mut dev = dev.open()?;
     println!("Type: {:?}", unsafe { (*dev.libftdi_context()).type_ });
-    println!("Interface: {:?}", unsafe { (*dev.libftdi_context()).interface });
-    println!("Bitbang mode: {:?}", unsafe { (*dev.libftdi_context()).bitbang_mode });
-    println!("Bitbang enabled: {:?}", unsafe { (*dev.libftdi_context()).bitbang_enabled });
-    println!("Detach mode: {:?}", unsafe { dev.libftdi_context().read().module_detach_mode });
-    println!("usb_dev: {:?}", unsafe { dev.libftdi_context().read().usb_dev });
-    println!("Detach mode: {:?}", unsafe { dev.libftdi_context().read().module_detach_mode });
+    println!("Interface: {:?}", unsafe {
+        (*dev.libftdi_context()).interface
+    });
+    println!("Bitbang mode: {:?}", unsafe {
+        (*dev.libftdi_context()).bitbang_mode
+    });
+    println!("Bitbang enabled: {:?}", unsafe {
+        (*dev.libftdi_context()).bitbang_enabled
+    });
+    println!("Detach mode: {:?}", unsafe {
+        dev.libftdi_context().read().module_detach_mode
+    });
+    println!("usb_dev: {:?}", unsafe {
+        dev.libftdi_context().read().usb_dev
+    });
+    println!("Detach mode: {:?}", unsafe {
+        dev.libftdi_context().read().module_detach_mode
+    });
 
     if cli.only_display {
-        return Ok(())
+        return Ok(());
     }
 
     dev.set_bitmode(0xff, ftdi::BitMode::SyncBB)?;
